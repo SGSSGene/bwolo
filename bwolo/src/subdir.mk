@@ -38,6 +38,6 @@ STD=c++11
 src/%.o: ./src/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -DSEQAN_ENABLE_TESTING=0 -DSEQAN_ENABLE_DEBUG=0 -DSEQAN_HAS_BZIP2=0 -DSEQAN_HAS_ZLIB=1 -O3 -pedantic -Wall -c -fmessage-length=0 -W -Wno-long-long -Wno-variadic-macros -std=$(STD) -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	g++ -isystem ../seqan/include -DSEQAN_ENABLE_TESTING=0 -DSEQAN_ENABLE_DEBUG=0 -DSEQAN_HAS_BZIP2=0 -DSEQAN_HAS_ZLIB=1 -O3 -pedantic -Wall -c -fmessage-length=0 -W -Wno-long-long -Wno-variadic-macros -std=$(STD) -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
