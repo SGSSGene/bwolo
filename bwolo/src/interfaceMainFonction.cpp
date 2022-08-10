@@ -163,8 +163,27 @@ void extendRight(AlignmentsMap & AligmentsByPattern, BwoloTPattern const & patte
 
 ////////////////////FIN TEST////////////////////////
 
+static mySequence reverseComplement(mySequence seq) {
+	mySequence seq_rev;
+	seq_rev.id = seq.id;
+	appendValue(seq_rev.id, '_');
+	for (size_t i{0}; i < length(seq.seq); ++i) {
+		char v = seq.seq[length(seq)-1-i];
+		if (v == 'A') v = 'T';
+		else if (v == 'a') v = 't';
+		else if (v == 'C') v = 'G';
+		else if (v == 'c') v = 'g';
+		else if (v == 'G') v = 'C';
+		else if (v == 'g') v = 'c';
+		else if (v == 'T') v = 'A';
+		else if (v == 't') v = 'a';
 
-void getPatternsFromfasta(char* fastaFile, StringSet<mySequence> & patterns, bool isVerbose){
+		appendValue(seq_rev.seq, v);
+	}
+	return seq_rev;
+}
+
+void getPatternsFromfasta(char* fastaFile, StringSet<mySequence> & patterns, bool addRevCompl, bool isVerbose){
 	if (isVerbose) cout << "opening fasta file : ";
 	SequenceStream seqStream(fastaFile);
 	if (!isGood(seqStream)) {
@@ -189,18 +208,31 @@ void getPatternsFromfasta(char* fastaFile, StringSet<mySequence> & patterns, boo
 			pattern.seq = seq;
 			appendValue(patterns, pattern);
 			if (isVerbose) cout << pattern.id << ':'<< pattern.seq << std::endl;
+
+			if (addRevCompl) {
+				mySequence pattern_rev = reverseComplement(pattern);
+				appendValue(patterns, pattern_rev);
+				if (isVerbose) cout << pattern_rev.id << ':'<< pattern_rev.seq << std::endl;
+			}
 		}
 	}
 	close(seqStream);
 }
 
-void getPatternsFromCStr(char* patternCstr, StringSet<mySequence> & patterns, bool ){
+void getPatternsFromCStr(char* patternCstr, StringSet<mySequence> & patterns, bool addRevCompl, bool isVerbose){
 	BwoloTPattern seq = patternCstr;
 	CharString id = "input_Seq";
 	mySequence pattern;
 	pattern.id = id;
 	pattern.seq = seq;
 	appendValue(patterns, pattern);
+	if (isVerbose) cout << pattern.id << ':'<< pattern.seq << std::endl;
+
+	if (addRevCompl) {
+		mySequence pattern_rev = reverseComplement(pattern);
+		appendValue(patterns, pattern_rev);
+		if (isVerbose) cout << pattern_rev.id << ':'<< pattern_rev.seq << std::endl;
+	}
 }
 
 void printPotentialOccurences(unsigned int id, mySequence & pattern, PotentialCandidates & occurences, bool){
@@ -278,17 +310,17 @@ void shearchAndPrintPotentialOccurences_PatternString(StringSet<mySequence> & pa
 //	printPotentialOccurencesMultiple(patterns, occurencesByPattern, isVerbose);
 }
 
-void printPotentialOccurences_PatternSequences(char* patternSequence, char* indexFile, unsigned short errNumber, bool isVerbose){
+void printPotentialOccurences_PatternSequences(char* patternSequence, char* indexFile, unsigned short errNumber, bool addRevCompl, bool isVerbose){
 	StringSet<mySequence> patterns;
 	if (isVerbose) cout << "get pattern from parameter" << std::endl;
-	getPatternsFromCStr(patternSequence, patterns, isVerbose);
+	getPatternsFromCStr(patternSequence, patterns, addRevCompl, isVerbose);
 	shearchAndPrintPotentialOccurences_PatternString(patterns, indexFile, errNumber, isVerbose);
 }
 
-void printPotentialOccurences_PatternFasta(char* patternFile, char* indexFile, unsigned short errNumber, bool isVerbose){
+void printPotentialOccurences_PatternFasta(char* patternFile, char* indexFile, unsigned short errNumber, bool addRevCompl, bool isVerbose){
 	StringSet<mySequence> patterns;
 	if (isVerbose) cout << "get pattern list from fasta file" << std::endl;
-	getPatternsFromfasta(patternFile, patterns, isVerbose);
+	getPatternsFromfasta(patternFile, patterns, addRevCompl, isVerbose);
 	shearchAndPrintPotentialOccurences_PatternString(patterns, indexFile, errNumber,  isVerbose);
 }
 

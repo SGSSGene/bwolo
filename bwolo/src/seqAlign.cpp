@@ -47,6 +47,7 @@ void printHelp(){
 	cout
 	<< "\t-s --score [optional][requiered_argument:int] : minimal alignment score. Default : -3"
 	<< endl;
+	cout << "\t-r --rev-compl [optional] : add inverse complement" << endl;
 	cout << "\t-v --verbose [optional] : Verbose mode." << endl;
 	cout << "\t-h --help print this message" << endl;
 	cout << "* : required one of them" << endl;
@@ -61,13 +62,15 @@ int main(int argc, char *argv[])
 	char* patternCstr = NULL;
 	char* fastaFile = NULL;
 	int minScore=-3;
+	bool revCompl = false;
 	bool isVerbose = false;
-	const char *shortOptions = "p:f:s:i:vh";
+	const char *shortOptions = "p:f:s:i:rvh";
 	static struct option longOptions[] = {
 			{ "pattern", required_argument, NULL,	'p' },
 			{ "fasta", required_argument, NULL,	'f' },
 			{ "score", required_argument, NULL,	's' },
 			{ "index", required_argument, NULL, 'i' },
+			{ "rev-compl", no_argument, NULL, 'r'},
 			{ "verbose", no_argument, NULL, 'v' },
 			{ "help", no_argument, NULL, 'h' },
 			{ NULL, 0, NULL, 0 } };
@@ -88,6 +91,9 @@ int main(int argc, char *argv[])
 			break;
 		case 'i':
 			indexFile = optarg;
+			break;
+		case 'r':
+			revCompl = true;
 			break;
 		case 'v':
 			isVerbose = true;
@@ -118,10 +124,10 @@ int main(int argc, char *argv[])
 
 	unsigned short errNumber=(unsigned short)-minScore;
 	if(fastaFile != NULL){
-		printPotentialOccurences_PatternFasta(fastaFile, indexFile, errNumber, isVerbose);
+		printPotentialOccurences_PatternFasta(fastaFile, indexFile, errNumber, revCompl, isVerbose);
 	}
 	if(patternCstr != NULL){
-		printPotentialOccurences_PatternSequences(patternCstr, indexFile, errNumber, isVerbose);
+		printPotentialOccurences_PatternSequences(patternCstr, indexFile, errNumber, revCompl, isVerbose);
 	}
 	exit(EXIT_SUCCESS);
 }

@@ -28,9 +28,9 @@
 #include "PotentialCandidates.h"
 
 
-void getPatternsFromfasta(char* fastaFile, StringSet<mySequence> & patterns, bool isVerbose);
+void getPatternsFromfasta(char* fastaFile, StringSet<mySequence> & patterns, bool addRevCompl, bool isVerbose);
 
-void getPatternsFromCStr(char* patternCstr, StringSet<mySequence> & patterns, bool isVerbose);
+void getPatternsFromCStr(char* patternCstr, StringSet<mySequence> & patterns, bool addRevCompl, bool isVerbose);
 
 void printPotentialOccurences(unsigned int id, mySequence & pattern, PotentialCandidates & occurences, bool isVerbose);
 
@@ -38,8 +38,8 @@ void printPotentialOccurencesMultiple(StringSet<mySequence> & patterns, String<P
 
 void shearchAndPrintPotentialOccurences_PatternString(StringSet<mySequence> & patterns, char* indexFile, unsigned short errNumber, bool isVerbose);
 
-void printPotentialOccurences_PatternSequences(char* patternSequence, char* indexFile, unsigned short errNumber, bool isVerbose);
+void printPotentialOccurences_PatternSequences(char* patternSequence, char* indexFile, unsigned short errNumber, bool addRevCompl, bool isVerbose);
 
-void printPotentialOccurences_PatternFasta(char* patternFile, char* indexFile, unsigned short errNumber, bool isVerbose);
+void printPotentialOccurences_PatternFasta(char* patternFile, char* indexFile, unsigned short errNumber, bool addRevCompl, bool isVerbose);
 
 #endif /* INTERFACEMAINFONCTION_H_ */
