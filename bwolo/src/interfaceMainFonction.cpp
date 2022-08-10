@@ -249,6 +249,8 @@ void shearchAndPrintPotentialOccurences_PatternString(StringSet<mySequence> & pa
 	if (isVerbose) cout<<"Filtering patterns..." << std::endl;
 	size_t nbPattern = length(patterns);
 	//String<PotentialCandidates> occurencesByPattern;
+
+	clock_t start = clock();
 	for (unsigned int i = 0; i < nbPattern; i++){
 		BwoloTPattern pattern;
 		pattern = patterns[i].seq;
@@ -270,6 +272,9 @@ void shearchAndPrintPotentialOccurences_PatternString(StringSet<mySequence> & pa
 		if (isVerbose) cout<<"OK"<<std::endl;
 		//appendValue(occurencesByPattern, results);
 	}
+	clock_t diff = clock() - start;
+	double msec = diff * 1. / CLOCKS_PER_SEC;
+	std::cerr << "Search time: " << msec << "\n";
 //	printPotentialOccurencesMultiple(patterns, occurencesByPattern, isVerbose);
 }
 
