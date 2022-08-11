@@ -104,17 +104,18 @@ int main(int argc, char *argv[]) {
 		if (isVerbose) cout << "OK" << endl;
 	}
 
-	if (isVerbose) cout << "reading the first sequence : ";
+	if (isVerbose) cout << "reading the all sequences : ";
 
 	CharString id;
 	BwoloTText seq;
-	if (readRecord(id, seq, seqStream) != 0) {
-		if (isVerbose) cout << "Error : There was an error reading : " << fastaFile << endl;
-		close(seqStream);
-		exit(EXIT_FAILURE);
-	} else {
-		if (isVerbose) cout << "OK" << endl;
+	BwoloTText tmp_seq;
+	size_t sequences_ct = 0;
+	while (readRecord(id, tmp_seq, seqStream) == 0) {
+		seq += tmp_seq;
+		sequences_ct += 1;
 	}
+	if (isVerbose) cout << "OK - " << sequences_ct << " sequences; total length: " << length(seq) << endl;
+
 	if (isVerbose) cout << "Indexing sequence : " << id << " : ";
 	BwoloTIndex myIndex(seq);
 	//les index étant créés à la demande, il faut forcer la création des différentes "fibres"

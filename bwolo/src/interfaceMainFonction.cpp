@@ -120,7 +120,7 @@ void cleanResults(std::set<FinalOccurence<BwoloTText>, LessFinalOccurenceBeginPo
 
 
 
-void extendRight(AlignmentsMap & AligmentsByPattern, BwoloTPattern const & pattern, BwoloTIndex const & index, unsigned short errNumber, bool /*isVerbose*/){
+void extendRight(AlignmentsMap & AligmentsByPattern, BwoloTPattern const & pattern, BwoloTIndex const & index, unsigned short errNumber, bool /*isVerbose*/, size_t qidx){
 	BwoloTText const & text = indexText(index);
 	typedef std::set<FinalOccurence<BwoloTText>, LessFinalOccurenceBeginPositionFirst<BwoloTText> > TSet;
 	TSet mySet;
@@ -155,10 +155,9 @@ void extendRight(AlignmentsMap & AligmentsByPattern, BwoloTPattern const & patte
 	while(mySetIt != endSetIt){
 		FinalOccurence<BwoloTText> occurence = *mySetIt;
 		BwoloTText occurenceSequence = infix(text, occurence.beginPosition, occurence.endPosition);
-		cout<< occurence.beginPosition <<":"<< occurence.endPosition <<":-"<< occurence.score << ":"<< occurenceSequence << ":"<< pattern << endl;
+		cout << qidx << ":" << occurence.beginPosition <<":"<< occurence.endPosition <<":-"<< occurence.score << ":"<< occurenceSequence << ":"<< pattern << endl;
 		mySetIt++;
 	}
-
 }
 
 ////////////////////FIN TEST////////////////////////
@@ -272,6 +271,7 @@ void shearchAndPrintPotentialOccurences_PatternString(StringSet<mySequence> & pa
 		cerr<< "Error while opening index from file " << indexFile <<std::endl;
 		exit(EXIT_FAILURE);
 	}
+
 	if (isVerbose) cout<<"OK" << endl;
 
 	if (isVerbose) cout<<"getting the root index iterator : ";
@@ -300,7 +300,7 @@ void shearchAndPrintPotentialOccurences_PatternString(StringSet<mySequence> & pa
 		extendLeft(AligmentsByPattern, results, pattern, errNumber, isVerbose);
 		if (isVerbose) cout<<"OK"<<std::endl;
 		if (isVerbose) cout<<"... right extention...";
-		extendRight(AligmentsByPattern, patterns[i].seq, myIndex, errNumber, isVerbose);//attention, ici c'est le pattern dans le "bon sens"
+		extendRight(AligmentsByPattern, patterns[i].seq, myIndex, errNumber, isVerbose, i);//attention, ici c'est le pattern dans le "bon sens"
 		if (isVerbose) cout<<"OK"<<std::endl;
 		//appendValue(occurencesByPattern, results);
 	}
