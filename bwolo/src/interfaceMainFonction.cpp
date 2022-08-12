@@ -166,8 +166,11 @@ static mySequence reverseComplement(mySequence seq) {
 	mySequence seq_rev;
 	seq_rev.id = seq.id;
 	appendValue(seq_rev.id, '_');
+	appendValue(seq_rev.id, 'r');
+	appendValue(seq_rev.id, 'e');
+	appendValue(seq_rev.id, 'v');
 	for (size_t i{0}; i < length(seq.seq); ++i) {
-		char v = seq.seq[length(seq)-1-i];
+		char v = seq.seq[length(seq.seq)-1-i];
 		if (v == 'A') v = 'T';
 		else if (v == 'a') v = 't';
 		else if (v == 'C') v = 'G';
